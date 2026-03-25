@@ -25,7 +25,7 @@ export const GeneralInfoSection = () => {
               The meeting aims to bring together researchers at different career stages to present new results, exchange ideas, and foster collaborations across various areas of PDEs.
             </p>
             <p className="text-lg text-gray-600 leading-relaxed mb-8">
-              The conference is organized by the Institute of Mathematics of the Polish Academy of Sciences, University of Warsaw, and University of Wrocław.
+              The conference is organized by the Institute of Mathematics of the Polish Academy of Sciences and University of Warsaw.
             </p>
           </motion.div>
           
