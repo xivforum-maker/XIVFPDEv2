@@ -29,7 +29,7 @@ export const ImportantInfoSection = () => {
             className="w-full md:w-[calc(50%-16px)] lg:w-[calc(25%-24px)] bg-white/95 backdrop-blur-sm shadow-xl p-8 rounded-2xl text-center border border-white/50 flex flex-col items-center"
           >
             <MapPin size={32} className="mx-auto text-accent-500 mb-4" />
-            <h4 className="text-lg font-serif font-bold text-primary-900 mb-2">Location</h4>
+            <h4 className="text-lg font-serif font-bold text-primary-900 mb-2">Venue</h4>
             <p className="text-gray-600 mb-4">{siteConfig.location}</p>
             <a 
               href={siteConfig.links.map}
