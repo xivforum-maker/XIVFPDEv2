@@ -80,7 +80,7 @@ export const ProgramPage = () => {
               Deadline for abstract submission: <strong className="text-primary-900">{siteConfig.deadlines.abstracts}</strong>
             </p>
             <p className="text-gray-600 max-w-2xl mx-auto mb-8">
-              We invite participants to submit abstracts for their presentations. Please note that abstract submission requires a Google account.
+              Please note that abstract submission requires a Google account.
             </p>
             <a 
               href={siteConfig.links.abstractSubmission}

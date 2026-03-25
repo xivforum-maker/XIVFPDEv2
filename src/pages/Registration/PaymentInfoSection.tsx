@@ -66,7 +66,8 @@ export const PaymentInfoSection = () => {
         <h4 className="font-medium mb-2 flex items-center gap-2">
           <AlertCircle size={20} className="text-blue-600" /> Financial Support
         </h4>
-        <p className="text-sm leading-relaxed text-blue-800">
+        {/* <p className="text-sm leading-relaxed text-blue-800"> */}
+        <p className="text-blue-800">
           In justified cases and subject to availability of funds, it is possible to apply for financial support for participation in the conference. Applications will be handled individually. Interested participants should contact the organisers directly at <a href={`mailto:${siteConfig.contactEmail}`} className="font-medium text-blue-700 hover:underline">{siteConfig.contactEmail}</a>.
         </p>
       </div>
