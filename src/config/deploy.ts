@@ -8,7 +8,7 @@
 export const deployConfig = {
   // Nazwa repozytorium na GitHubie (np. 'TestXIV')
   // Bez początkowych i końcowych ukośników!
-  repoName: 'XIVFPDEv2',
+  repoName: '/',
   
   // Czy aplikacja jest budowana pod GitHub Pages?
   // UWAGA: Zmień na TRUE tuż przed zrobieniem commita i pusha na GitHuba!
