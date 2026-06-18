@@ -54,11 +54,19 @@ export const ParticipantsPage = () => {
         p.affiliation.toLowerCase().includes(query)
       );
     }
+
+    const collator = new Intl.Collator(['pl', 'de', 'en'], {
+      sensitivity: 'base',
+      usage: 'sort',
+    });
     
     result.sort((a, b) => {
-      if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'asc' ? -1 : 1;
-      if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === 'asc' ? 1 : -1;
-      return 0;
+      const comparison = collator.compare(
+        a[sortConfig.key],
+        b[sortConfig.key]
+      );
+
+      return sortConfig.direction === 'asc' ? comparison : -comparison;
     });
     
     return result;
