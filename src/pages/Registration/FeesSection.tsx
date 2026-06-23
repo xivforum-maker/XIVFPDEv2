@@ -1,9 +1,22 @@
 import React from 'react';
-import { UserCheck, Mail, ExternalLink } from 'lucide-react';
+import { UserCheck, Mail, ExternalLink, CalendarClock } from 'lucide-react';
 import { siteConfig } from '../../config/site';
 
 export const FeesSection = () => {
   return (
+    <>
+    <div className="mb-10 p-6 bg-accent-50 border-l-4 border-accent-500 rounded-r-xl flex items-start gap-4">
+      <div className="p-3 bg-accent-100 rounded-full text-accent-600 shrink-0">
+        <CalendarClock size={24} />
+        </div>
+        <div>
+        <h3 className="text-xl font-serif font-bold text-primary-900 mb-1">Payment Deadline</h3>
+        <p className="text-gray-700 leading-relaxed">
+          The deadline for payment is <strong className="text-accent-600">{siteConfig.deadlines.payment}</strong>. Please ensure your transfer is completed before this date.
+        </p>
+      </div>
+    </div>
+
     <div className="grid md:grid-cols-2 gap-12">
       <div>
         <h3 className="text-2xl font-serif text-primary-900 mb-6 flex items-center gap-3">
@@ -54,5 +67,6 @@ export const FeesSection = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };

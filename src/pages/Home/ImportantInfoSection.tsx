@@ -48,6 +48,7 @@ export const ImportantInfoSection = () => {
             <h4 className="text-lg font-serif font-bold text-primary-900 mb-2">Deadlines</h4>
             <div className="text-gray-600 space-y-1">
               <p><span className="font-medium text-gray-900">Registration:</span> {siteConfig.deadlines.registration}</p>
+              <p><span className="font-medium text-gray-900">Payment:</span> {siteConfig.deadlines.payment}</p>
               <p><span className="font-medium text-gray-900">Abstracts:</span> {siteConfig.deadlines.abstracts}</p>
             </div>
           </div>

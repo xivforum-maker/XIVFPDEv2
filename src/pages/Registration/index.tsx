@@ -16,6 +16,8 @@ export const RegistrationPage = () => {
           animate={{ opacity: 1, y: 0 }}
           className="bg-white rounded-2xl shadow-xl p-8 md:p-12"
         >
+
+          
           <FeesSection />
           <PaymentInfoSection />
         </motion.div>

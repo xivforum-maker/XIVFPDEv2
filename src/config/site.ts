@@ -31,8 +31,9 @@ export const siteConfig = {
 
   // Deadlines
   deadlines: {
-    registration: "TBA",
-    abstracts: "TBA"
+    registration: "15 July 2026",
+    abstracts: "TBA",
+    payment: "15 July 2026"
   },
   conferenceStartDate: "2026-09-14T09:00:00",
   conferenceStartDateString: "14 September 2026, 9:00",
