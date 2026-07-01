@@ -4,7 +4,7 @@ export const siteConfig = {
   dates: "14 – 18 September 2026",
   location: "Będlewo Conference Center, Poland",
   contactEmail: "xivforum@impan.pl",
-  lastUpdate: "June 2026",
+  lastUpdate: "July 2026",
   copyright: "2026 XIV Forum of Partial Differential Equations",
   
   // Layout & UI
