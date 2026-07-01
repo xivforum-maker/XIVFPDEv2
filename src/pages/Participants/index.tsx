@@ -97,7 +97,7 @@ export const ParticipantsPage = () => {
     <main className="flex-grow relative pb-24">
       <div className="absolute inset-0 z-[-1] bg-gray-50/90 backdrop-blur-[3px]" />
       <PageHeader title="Participants" subtitle="List of registered attendees" />
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
