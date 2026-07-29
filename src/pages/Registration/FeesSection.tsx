@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserCheck, Mail, ExternalLink, CalendarClock } from 'lucide-react';
+import { UserCheck, Mail, CalendarClock, Lock } from 'lucide-react';
 import { siteConfig } from '../../config/site';
 
 export const FeesSection = () => {
@@ -49,17 +49,16 @@ export const FeesSection = () => {
           <Mail className="text-accent-500" /> How to Register
         </h3>
         <p className="text-gray-600 mb-8 leading-relaxed">
-          Please complete the online registration form to secure your place at the conference. If you have any questions regarding the registration process, feel free to contact us.
+          Registration for the conference is now closed. Thank you for your interest in the XIV Forum of Partial Differential Equations. In exceptional cases, please contact the organizers directly.
         </p>
         
-        <a 
-          href={siteConfig.links.registrationForm}
-          target="_blank"
-          rel="noreferrer"
-          className="block w-full text-center px-8 py-4 bg-accent-500 hover:bg-accent-600 text-white font-medium rounded-xl transition-all transform hover:-translate-y-1 shadow-lg shadow-accent-500/30 mb-6"
+        <button
+          type="button"
+          disabled
+          className="block w-full cursor-not-allowed text-center px-8 py-4 bg-gray-200 text-gray-500 font-medium rounded-xl shadow-sm mb-6"
         >
-          Go to Registration Form <ExternalLink size={18} className="inline ml-2" />
-        </a>
+          Registration is Closed <Lock size={18} className="inline ml-2" />
+        </button>
         
         <div className="flex items-center justify-center gap-3 text-gray-600 bg-gray-50 p-4 rounded-xl">
           <Mail size={20} className="text-primary-900" />

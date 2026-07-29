@@ -35,6 +35,9 @@ jobs:
           
       - name: Install dependencies
         run: npm ci
+
+      - name: Set last update month
+        run: echo "VITE_LAST_UPDATE=$(TZ=Europe/Warsaw date +'%B %Y')" >> "$GITHUB_ENV"
         
       - name: Build project
         run: npm run build
