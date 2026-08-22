@@ -16,7 +16,7 @@ export const invitedSpeakers: Speaker[] = [
   { name: "Konstantin Merz", affiliation: "ETH Zurich, Switzerland", url: "https://people.phys.ethz.ch/~mkonstanti/", image: "", imagePosition: "center" },
   { name: "Katarzyna Pietruska-Pałuba", affiliation: "University of Warsaw, Poland", url: "https://www.mimuw.edu.pl/pl/pracownicy/431/", image: "", imagePosition: "center" },
   { name: "Łukasz Płociniczak", affiliation: "Wrocław University of Science and Technology, Poland", url: "https://prac.im.pwr.edu.pl/~plociniczak/", image: "", imagePosition: "center" },
-  { name: "Julio Rossi (Not Confirmed)", affiliation: "University of Buenos Aires, Argentina", url: "#", image: "", imagePosition: "center" },
+  // { name: "Julio Rossi (Not Confirmed)", affiliation: "University of Buenos Aires, Argentina", url: "#", image: "", imagePosition: "center" },
   { name: "Jakub Skrzeczkowski", affiliation: "University of Oxford, UK", url: "https://www.maths.ox.ac.uk/people/jakub.skrzeczkowski", image: "", imagePosition: "center" },
   { name: "Maciej Starostka", affiliation: "Gdańsk University of Technology, Poland", url: "https://pg.edu.pl/p/maciej-starostka-64529", image: "", imagePosition: "center" },
   { name: "Andrzej Szulkin", affiliation: "Stockholm University, Sweden", url: "https://www.su.se/english/profiles/a/andrzejs", image: "", imagePosition: "center" },
