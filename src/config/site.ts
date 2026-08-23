@@ -76,10 +76,12 @@ export const siteConfig = {
       id: "1VffiImOEmeS45pU_LhfasbGLAAkNoK3ASsNCB64V1K4",
       gid: "1757362562"
     },
-    schedule: {
-      id: "1qzXcSyGqvO82RKZHYP4ongcIbIbkXkHhNWaZ2FAbb6k",
-      gid: "293368709",
-      range: "A:F"
+    programme: {
+      id: "1gAbrya9JKX_CyxJ101bc63IdgzXZLDNesRYKjsfChnY",
+      eventsGid: "2142832505",
+      postersGid: "1769459766",
+      timezone: "Europe/Warsaw",
+      cacheMinutes: 5
     }
   }
 };
