@@ -31,6 +31,16 @@ const TIMELINE_BOTTOM_GUTTER = 0;
 const TIMELINE_END_MINUTES = 20 * 60 + 30;
 const CONTRIBUTED_GROUP_MAX_GAP = 10;
 const CONTRIBUTED_GROUP_TAIL_MINUTES = 5;
+const SWIPE_DISTANCE_THRESHOLD = 0.22;
+const SWIPE_VELOCITY_THRESHOLD = 0.45;
+const SWIPE_AXIS_LOCK_THRESHOLD = 6;
+
+interface SwipeGesture {
+  startX: number;
+  startY: number;
+  startedAt: number;
+  axis: 'horizontal' | 'vertical' | null;
+}
 
 const minutesFromTime = (time: string) => {
   const [hours, minutes] = time.split(':').map(Number);
@@ -662,7 +672,12 @@ export const ProgrammeCalendar = ({ events, posters, searchQuery }: ProgrammeCal
   const [posterEvent, setPosterEvent] = useState<ProgrammeEvent | null>(null);
   const [talkEvents, setTalkEvents] = useState<ProgrammeEvent[] | null>(null);
   const [detailEvent, setDetailEvent] = useState<ProgrammeEvent | null>(null);
-  const touchStart = useRef<number | null>(null);
+  const [swipeProgress, setSwipeProgress] = useState(0);
+  const [isSwiping, setIsSwiping] = useState(false);
+  const swipeGesture = useRef<SwipeGesture | null>(null);
+  const swipeConsumed = useRef(false);
+  const swipeResetTimer = useRef<number | null>(null);
+  const mobileTimelineViewport = useRef<HTMLDivElement>(null);
   const mobileNowMarker = useRef<HTMLDivElement>(null);
   const query = searchQuery.trim().toLowerCase();
 
@@ -677,7 +692,6 @@ export const ProgrammeCalendar = ({ events, posters, searchQuery }: ProgrammeCal
     return values;
   }, [timelineEnd, timelineStart]);
   const selectedIndex = Math.max(0, days.indexOf(selectedDay));
-  const selectedEvents = events.filter((event) => event.date === selectedDay);
   const matchingCount = events.filter((event) => {
     const sessionPosters = event.subtype === 'Poster session' ? posters.filter((poster) => poster.posterSession === event.reference) : [];
     return !query || searchableText(event, sessionPosters).includes(query);
@@ -686,6 +700,10 @@ export const ProgrammeCalendar = ({ events, posters, searchQuery }: ProgrammeCal
   useEffect(() => {
     const timer = window.setInterval(() => setNow(getWarsawClock()), 30_000);
     return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => () => {
+    if (swipeResetTimer.current !== null) window.clearTimeout(swipeResetTimer.current);
   }, []);
 
   useEffect(() => {
@@ -705,15 +723,93 @@ export const ProgrammeCalendar = ({ events, posters, searchQuery }: ProgrammeCal
   };
 
   const onTouchStart = (event: TouchEvent) => {
-    touchStart.current = event.changedTouches[0]?.clientX ?? null;
+    const touch = event.touches[0];
+    if (!touch || event.touches.length !== 1) return;
+
+    swipeGesture.current = {
+      startX: touch.clientX,
+      startY: touch.clientY,
+      startedAt: performance.now(),
+      axis: null,
+    };
+    swipeConsumed.current = false;
+    setSwipeProgress(0);
   };
 
-  const onTouchEnd = (event: TouchEvent) => {
-    if (touchStart.current === null) return;
-    const distance = (event.changedTouches[0]?.clientX ?? touchStart.current) - touchStart.current;
-    if (Math.abs(distance) > 50) changeDay(distance > 0 ? -1 : 1);
-    touchStart.current = null;
+  const onTouchMove = (event: TouchEvent) => {
+    const gesture = swipeGesture.current;
+    const touch = event.touches[0];
+    if (!gesture || !touch) return;
+
+    const distanceX = touch.clientX - gesture.startX;
+    const distanceY = touch.clientY - gesture.startY;
+
+    if (!gesture.axis) {
+      if (Math.max(Math.abs(distanceX), Math.abs(distanceY)) < SWIPE_AXIS_LOCK_THRESHOLD) return;
+      gesture.axis = Math.abs(distanceX) > Math.abs(distanceY) ? 'horizontal' : 'vertical';
+    }
+
+    if (gesture.axis !== 'horizontal') return;
+    if (event.cancelable) event.preventDefault();
+
+    const viewportWidth = mobileTimelineViewport.current?.clientWidth ?? window.innerWidth;
+    let progress = distanceX / Math.max(1, viewportWidth);
+    const pullingPastFirstDay = selectedIndex === 0 && progress > 0;
+    const pullingPastLastDay = selectedIndex === days.length - 1 && progress < 0;
+    if (pullingPastFirstDay || pullingPastLastDay) progress *= 0.22;
+
+    swipeConsumed.current = Math.abs(distanceX) > SWIPE_AXIS_LOCK_THRESHOLD;
+    setIsSwiping(true);
+    setSwipeProgress(Math.max(-1, Math.min(1, progress)));
   };
+
+  const finishSwipe = (event: TouchEvent) => {
+    const gesture = swipeGesture.current;
+    if (!gesture) return;
+
+    const touch = event.changedTouches[0];
+    const distanceX = touch ? touch.clientX - gesture.startX : 0;
+    const distanceY = touch ? touch.clientY - gesture.startY : 0;
+    const elapsed = Math.max(1, performance.now() - gesture.startedAt);
+    const velocity = distanceX / elapsed;
+    const viewportWidth = mobileTimelineViewport.current?.clientWidth ?? window.innerWidth;
+    const distanceProgress = distanceX / Math.max(1, viewportWidth);
+    const horizontalGesture = gesture.axis === 'horizontal'
+      || (gesture.axis === null
+        && Math.abs(distanceX) > Math.abs(distanceY)
+        && Math.abs(distanceX) >= SWIPE_AXIS_LOCK_THRESHOLD);
+    const shouldChangeDay = horizontalGesture
+      && (Math.abs(distanceProgress) >= SWIPE_DISTANCE_THRESHOLD
+        || (Math.abs(velocity) >= SWIPE_VELOCITY_THRESHOLD && Math.abs(distanceX) >= 30));
+
+    if (shouldChangeDay) changeDay(distanceX > 0 ? -1 : 1);
+
+    swipeGesture.current = null;
+    setIsSwiping(false);
+    setSwipeProgress(0);
+
+    if (swipeConsumed.current) {
+      if (swipeResetTimer.current !== null) window.clearTimeout(swipeResetTimer.current);
+      swipeResetTimer.current = window.setTimeout(() => {
+        swipeConsumed.current = false;
+        swipeResetTimer.current = null;
+      }, 350);
+    }
+  };
+
+  const cancelSwipe = () => {
+    swipeGesture.current = null;
+    setIsSwiping(false);
+    setSwipeProgress(0);
+  };
+
+  const mobileTrackStyle: CSSProperties = {
+    transform: `translate3d(calc(${-selectedIndex * 100}% + ${swipeProgress * 100}%), 0, 0)`,
+  };
+
+  const mobileTrackClass = `flex w-full will-change-transform ${isSwiping
+    ? ''
+    : 'transition-transform duration-[280ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none'}`;
 
   if (!days.length) return null;
 
@@ -765,14 +861,32 @@ export const ProgrammeCalendar = ({ events, posters, searchQuery }: ProgrammeCal
         </div>
       </div>
 
-      <div className="xl:hidden" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+      <div
+        className="touch-pan-y xl:hidden"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={finishSwipe}
+        onTouchCancel={cancelSwipe}
+        onClickCapture={(event) => {
+          if (!swipeConsumed.current) return;
+          event.preventDefault();
+          event.stopPropagation();
+          swipeConsumed.current = false;
+        }}
+      >
         <div className="sticky top-16 z-30 mb-3 flex items-center justify-between rounded-xl bg-primary-900 px-2 py-2 text-white shadow-lg">
           <button type="button" onClick={() => changeDay(-1)} disabled={selectedIndex === 0} className="rounded-lg p-2 transition hover:bg-white/10 disabled:opacity-25" aria-label="Previous day">
             <ChevronLeft size={22} />
           </button>
-          <div className="text-center">
-            <div className="text-sm font-bold">{dayLabel(selectedDay, 'mobile')}</div>
-            <div className="mt-0.5 text-[9px] uppercase tracking-[0.18em] text-white/50">Swipe to change day</div>
+          <div className="min-w-0 flex-1 overflow-hidden text-center" aria-live="polite">
+            <div className={mobileTrackClass} style={mobileTrackStyle}>
+              {days.map((day) => (
+                <div key={day} className="w-full shrink-0" aria-hidden={day !== selectedDay}>
+                  <div className="text-sm font-bold">{dayLabel(day, 'mobile')}</div>
+                  <div className="mt-0.5 text-[9px] uppercase tracking-[0.18em] text-white/50">Swipe to change day</div>
+                </div>
+              ))}
+            </div>
           </div>
           <button type="button" onClick={() => changeDay(1)} disabled={selectedIndex === days.length - 1} className="rounded-lg p-2 transition hover:bg-white/10 disabled:opacity-25" aria-label="Next day">
             <ChevronRight size={22} />
@@ -787,20 +901,28 @@ export const ProgrammeCalendar = ({ events, posters, searchQuery }: ProgrammeCal
               </span>
             ))}
           </div>
-          <Timeline
-            day={selectedDay}
-            events={selectedEvents}
-            posters={posters}
-            query={query}
-            timelineStart={timelineStart}
-            timelineEnd={timelineEnd}
-            pxPerMinute={MOBILE_PX_PER_MINUTE}
-            now={now}
-            markerRef={mobileNowMarker}
-            onOpenPosters={setPosterEvent}
-            onOpenTalks={setTalkEvents}
-            onOpenEvent={setDetailEvent}
-          />
+          <div ref={mobileTimelineViewport} className="min-w-0 overflow-hidden">
+            <div className={mobileTrackClass} style={mobileTrackStyle}>
+              {days.map((day) => (
+                <div key={day} className="w-full shrink-0">
+                  <Timeline
+                    day={day}
+                    events={events.filter((event) => event.date === day)}
+                    posters={posters}
+                    query={query}
+                    timelineStart={timelineStart}
+                    timelineEnd={timelineEnd}
+                    pxPerMinute={MOBILE_PX_PER_MINUTE}
+                    now={now}
+                    markerRef={day === selectedDay ? mobileNowMarker : undefined}
+                    onOpenPosters={setPosterEvent}
+                    onOpenTalks={setTalkEvents}
+                    onOpenEvent={setDetailEvent}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
