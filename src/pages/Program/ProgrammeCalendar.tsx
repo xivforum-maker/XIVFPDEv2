@@ -200,6 +200,7 @@ const EventCard = ({ event, pxPerMinute, timelineStart, timelineEnd, posters, qu
   const compact = cardHeight < 54;
   const roomy = cardHeight >= 80;
   const isCompactEvent = event.type === 'Break' && duration <= 30;
+  const showTalkLocationBelow = event.type === 'Talk' && event.subtype === 'Invited';
   const showExtraInfo = Boolean(event.extraInfo)
     && !(event.type === 'Break' && event.subtype.toLowerCase() === 'coffee break')
     && !isCompactEvent;
@@ -235,15 +236,23 @@ const EventCard = ({ event, pxPerMinute, timelineStart, timelineEnd, posters, qu
       </div>
 
       {event.type === 'Talk' && event.subtype !== 'Poster session' && (
-        <div className="flex min-h-0 items-center gap-1.5">
-          <div className="min-w-0 flex-1 truncate text-sm font-bold leading-tight">{event.name || 'To be announced'}</div>
-          {showExtraInfo && (
-            <div className={`${compact ? 'max-w-[42%] text-[8px]' : 'max-w-[48%] text-[9px]'} flex shrink-0 items-center gap-0.5 truncate opacity-60`}>
+        <>
+          <div className="flex min-h-0 items-center gap-1.5">
+            <div className="min-w-0 flex-1 truncate text-sm font-bold leading-tight">{event.name || 'To be announced'}</div>
+            {showExtraInfo && !showTalkLocationBelow && (
+              <div className={`${compact ? 'max-w-[42%] text-[8px]' : 'max-w-[48%] text-[9px]'} flex shrink-0 items-center gap-0.5 truncate opacity-60`}>
+                <MapPin size={compact ? 8 : 10} className="shrink-0" />
+                <span className="truncate">{event.extraInfo}</span>
+              </div>
+            )}
+          </div>
+          {showExtraInfo && showTalkLocationBelow && (
+            <div className={`${compact ? 'text-[8px]' : 'text-[9px]'} mt-auto flex shrink-0 items-center gap-0.5 truncate opacity-60`}>
               <MapPin size={compact ? 8 : 10} className="shrink-0" />
               <span className="truncate">{event.extraInfo}</span>
             </div>
           )}
-        </div>
+        </>
       )}
 
       {event.subtype === 'Poster session' && (
@@ -824,8 +833,8 @@ export const ProgrammeCalendar = ({ events, posters, searchQuery }: ProgrammeCal
         {query && <div className="text-xs text-slate-500">{matchingCount} matching {matchingCount === 1 ? 'event' : 'events'}</div>}
       </div>
 
-      <div className="hidden overflow-hidden rounded-xl border border-slate-200 xl:block">
-        <div className="grid grid-cols-[4rem_repeat(5,minmax(0,1fr))] bg-primary-900 text-white">
+      <div className="relative hidden rounded-xl border border-slate-200 xl:block">
+        <div className="sticky top-16 z-30 grid grid-cols-[4rem_repeat(5,minmax(0,1fr))] overflow-hidden rounded-t-[11px] bg-primary-900 text-white shadow-lg">
           <div className="flex items-center justify-center border-r border-white/10"><CalendarDays size={17} className="opacity-60" /></div>
           {days.map((day) => (
             <div key={day} className="border-r border-white/10 px-2 py-3 text-center last:border-r-0">
@@ -834,7 +843,7 @@ export const ProgrammeCalendar = ({ events, posters, searchQuery }: ProgrammeCal
             </div>
           ))}
         </div>
-        <div className="grid grid-cols-[4rem_repeat(5,minmax(0,1fr))]">
+        <div className="grid grid-cols-[4rem_repeat(5,minmax(0,1fr))] overflow-hidden rounded-b-[11px]">
           <div className="relative bg-white" style={{ height: TIMELINE_TOP_GUTTER + (timelineEnd - timelineStart) * DESKTOP_PX_PER_MINUTE + TIMELINE_BOTTOM_GUTTER }}>
             {ticks.map((tick) => (
               <span key={tick} className={`absolute right-2 tabular-nums text-slate-500 ${tick === timelineEnd ? '-translate-y-full' : '-translate-y-1/2'} ${tick % 60 === 0 ? 'text-[10px] font-semibold' : 'text-[9px]'}`} style={{ top: TIMELINE_TOP_GUTTER + (tick - timelineStart) * DESKTOP_PX_PER_MINUTE }}>
