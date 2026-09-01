@@ -110,6 +110,13 @@ export const SpeakersDirectory = ({ contributions, events, loading }: SpeakersDi
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   const allSpeakers = useMemo(() => groupContributions(contributions, events), [contributions, events]);
+  // Licznik "speakers" obejmuje wyłącznie wystąpienia ustne (Invited + Contributed) —
+  // osoba prezentująca sam plakat nie jest liczona jako prelegent. Licznik
+  // "contributions" pozostaje pełny, czyli razem z plakatami.
+  const talkSpeakerCount = useMemo(
+    () => speakerCount(contributions.filter((item) => item.type !== 'Poster')),
+    [contributions],
+  );
   const visibleContributions = useMemo(() => activeFilter === 'All'
     ? contributions
     : contributions.filter((contribution) => contribution.type === activeFilter), [activeFilter, contributions]);
@@ -154,7 +161,7 @@ export const SpeakersDirectory = ({ contributions, events, loading }: SpeakersDi
             </span>
           </span>
           <span className="flex shrink-0 items-center gap-3 self-stretch border-t border-slate-100 pt-4 text-sm font-semibold text-primary-900 sm:self-auto sm:border-l sm:border-t-0 sm:py-2 sm:pl-6 sm:pt-2">
-            {loading ? 'Loading…' : `${allSpeakers.length} speakers`}
+            {loading ? 'Loading…' : `${talkSpeakerCount} speakers`}
             <ArrowRight size={18} className="text-accent-600 transition-transform group-hover:translate-x-1" aria-hidden="true" />
           </span>
         </button>
@@ -177,7 +184,7 @@ export const SpeakersDirectory = ({ contributions, events, loading }: SpeakersDi
               </div>
               <h4 className="text-2xl font-serif font-semibold text-primary-900">Speakers &amp; contributions</h4>
               <p className="mt-1 text-sm text-slate-500">
-                {allSpeakers.length} speakers · {contributions.length} contributions · alphabetical by surname
+                {talkSpeakerCount} speakers · {contributions.length} contributions · alphabetical by surname
               </p>
             </div>
             <button type="button" onClick={() => setIsOpen(false)} className="rounded-full p-2 text-slate-500 transition hover:bg-white hover:text-slate-900" aria-label="Close speaker list">
