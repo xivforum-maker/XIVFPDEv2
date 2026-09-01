@@ -1,149 +1,144 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { BookOpen, ExternalLink, Calendar, Search, AlertCircle } from 'lucide-react';
+import { AlertCircle, BookOpen, Calendar, Database, ExternalLink, Info, Search } from 'lucide-react';
 import { PageHeader } from '../../components/layout/PageHeader';
 import { siteConfig } from '../../config/site';
-import { ScheduleTable, ScheduleRow, ScheduleSlot } from './ScheduleTable';
+import { ProgrammeCalendar } from './ProgrammeCalendar';
+import { SpeakersDirectory } from './SpeakersDirectory';
+import { getProgrammeData } from './programmeData';
+import type { ProgrammeData } from './types';
 
 export const ProgramPage = () => {
-  const [schedule, setSchedule] = useState<ScheduleRow[]>([]);
+  const [data, setData] = useState<ProgrammeData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    const fetchSchedule = async () => {
-      try {
-        const { id, gid, range } = siteConfig.sheets.schedule;
-        const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?gid=${gid}&range=${range}&tqx=out:json`;
-        const response = await fetch(url);
-        const text = await response.text();
-        
-        const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);/);
-        if (!match) throw new Error("Invalid response format");
-        
-        const data = JSON.parse(match[1]);
-        const rows = data.table.rows;
-        
-        const parsedSchedule: ScheduleRow[] = [];
-        
-        for (let i = 0; i < rows.length; i += 2) {
-          const nameRow = rows[i]?.c || [];
-          const titleRow = rows[i + 1]?.c || [];
-          
-          const time = nameRow[0]?.v || "";
-          const days: ScheduleSlot[] = [];
-          let rawText = time + " ";
-          
-          for (let col = 1; col <= 5; col++) {
-            const name = nameRow[col]?.v || "";
-            const title = titleRow[col]?.v || "";
-            days.push({ name, title });
-            rawText += `${name} ${title} `;
-          }
-          
-          parsedSchedule.push({ time, days, rawText: rawText.toLowerCase() });
-        }
-        
-        setSchedule(parsedSchedule);
-        setLoading(false);
-      } catch (err) {
-        console.error("Failed to fetch schedule:", err);
-        setError("Failed to load schedule. Please try again later.");
-        setLoading(false);
-      }
-    };
+    let active = true;
 
-    fetchSchedule();
+    getProgrammeData().then((programme) => {
+      if (!active) return;
+      setData(programme);
+      setLoading(false);
+    });
+
+    return () => {
+      active = false;
+    };
   }, []);
 
-  const filteredSchedule = schedule.filter(row => 
-    searchQuery === "" || row.rawText.includes(searchQuery.toLowerCase())
-  );
-
-  const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-
   return (
-    <main className="flex-grow relative pb-24">
+    <main className="relative flex-grow pb-24">
       <div className="absolute inset-0 z-[-1] bg-gray-50/90 backdrop-blur-[3px]" />
-      <PageHeader title="Programme & Abstracts" subtitle="Schedule and submissions" />
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10">
-        <motion.div 
+      <PageHeader title="Programme & Abstracts" subtitle="Conference schedule and submissions" />
+
+      <div className="relative z-10 mx-auto -mt-8 max-w-[1600px] px-3 sm:px-6 lg:px-8">
+        <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl shadow-xl p-8 md:p-12 mb-12"
+          className="mx-auto mb-12 max-w-6xl rounded-2xl bg-white p-8 shadow-xl md:p-12"
+          aria-labelledby="abstract-submission-heading"
         >
-          <div className="text-center mb-12">
-            <BookOpen size={48} className="mx-auto text-accent-500 mb-6" />
-            <h3 className="text-2xl font-serif text-primary-900 mb-4">Abstract Submission</h3>
-            <p className="text-gray-600 max-w-2xl mx-auto mb-4">
+          <div className="mb-12 text-center">
+            <BookOpen size={48} className="mx-auto mb-6 text-accent-500" />
+            <h3 id="abstract-submission-heading" className="mb-4 text-2xl font-serif text-primary-900">Abstract Submission</h3>
+            <p className="mx-auto mb-4 max-w-2xl text-gray-600">
               Deadline for abstract submission: <strong className="text-primary-900">{siteConfig.deadlines.abstracts}</strong>
             </p>
-            <p className="text-gray-600 max-w-2xl mx-auto mb-8">
-              Please note that abstract submission requires a Google account.
-            </p>
-            <a 
+            <p className="mx-auto mb-8 max-w-2xl text-gray-600">Please note that abstract submission requires a Google account.</p>
+            <a
               href={siteConfig.links.abstractSubmission}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center px-8 py-3 bg-primary-900 hover:bg-primary-800 text-white font-medium rounded-full transition-all"
+              className="inline-flex items-center rounded-full bg-primary-900 px-8 py-3 font-medium text-white transition-all hover:bg-primary-800"
             >
               Submit Abstract <ExternalLink size={16} className="ml-2" />
             </a>
           </div>
-          
-          <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-xl">
-            <h4 className="text-lg font-medium text-blue-900 mb-2 flex items-center gap-2">
+
+          <div className="rounded-r-xl border-l-4 border-blue-500 bg-blue-50 p-6">
+            <h4 className="mb-2 flex items-center gap-2 text-lg font-medium text-blue-900">
               <AlertCircle size={20} className="text-blue-600" /> Alternative Submission
             </h4>
             <p className="text-blue-800">
-              If you wish to submit an abstract without using a Google account, please send your abstract directly to the conference organizers at <a href={`mailto:${siteConfig.contactEmail}`} className="font-bold hover:underline">{siteConfig.contactEmail}</a>.
+              If you wish to submit an abstract without using a Google account, please send your abstract directly to the conference organizers at{' '}
+              <a href={`mailto:${siteConfig.contactEmail}`} className="font-bold hover:underline">{siteConfig.contactEmail}</a>.
             </p>
           </div>
-        </motion.div>
+        </motion.section>
 
-        {/* Schedule Section */}
-        <motion.div 
+        <motion.aside
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          className="mx-auto mb-12 max-w-6xl rounded-r-xl border-l-4 border-blue-500 bg-blue-50 p-6"
+          aria-labelledby="programme-status-heading"
+        >
+          <h3 id="programme-status-heading" className="mb-2 flex items-center gap-2 text-lg font-medium text-blue-900">
+            <Info size={20} className="text-blue-600" aria-hidden="true" /> Programme in preparation
+          </h3>
+          <div className="space-y-3 text-blue-800">
+            <p>
+              Please note that the conference programme is currently being prepared and may be adjusted as organizational details are finalized.
+            </p>
+            <p>
+              Invited talks are planned for 55 minutes, while contributed talks are planned for 25 minutes. Short intervals between talks are reserved for questions, speaker changes, and technical preparation.
+            </p>
+          </div>
+        </motion.aside>
+
+        <SpeakersDirectory
+          contributions={data?.contributions ?? []}
+          events={data?.events ?? []}
+          loading={loading}
+        />
+
+        <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-white rounded-2xl shadow-xl p-6 md:p-8"
+          transition={{ delay: 0.12 }}
+          className="mb-12 rounded-2xl bg-white p-4 shadow-xl sm:p-6 lg:p-8"
+          aria-labelledby="conference-programme-heading"
         >
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+          <div className="mb-6 flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
             <div>
-              <h3 className="text-2xl font-serif text-primary-900 flex items-center gap-2">
-                <Calendar className="text-accent-500" /> Conference Schedule
+              <h3 id="conference-programme-heading" className="flex items-center gap-2 text-2xl font-serif text-primary-900">
+                <Calendar className="text-accent-500" /> Conference programme
               </h3>
-              <p className="text-sm text-gray-500 mt-1">Auto-updated from Google Sheets</p>
+              <p className="mt-1 flex items-center gap-1.5 text-sm text-gray-500">
+                <Database size={14} className="text-emerald-600" />
+                {data?.source === 'sheet' ? 'Live data from Google Sheets' : 'Programme preview'} · Europe/Warsaw
+              </p>
             </div>
-            
-            <div className="relative max-w-md w-full">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search size={18} className="text-gray-400" />
-              </div>
+
+            <label className="relative block w-full max-w-md">
+              <span className="sr-only">Search programme</span>
+              <Search size={18} className="pointer-events-none absolute inset-y-0 left-3 my-auto text-gray-400" />
               <input
-                type="text"
-                placeholder="Search (speaker / title)…"
+                type="search"
+                placeholder="Search speaker, title or event…"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-xl leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-accent-500 focus:border-accent-500 sm:text-sm transition-colors"
+                onChange={(event) => setSearchQuery(event.target.value)}
+                className="block w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 pl-10 pr-3 text-sm transition-colors placeholder:text-gray-400 focus:border-accent-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-accent-500/30"
               />
-            </div>
+            </label>
           </div>
 
-          {loading ? (
-            <div className="py-20 text-center">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-gray-200 border-t-accent-500 mb-4"></div>
-              <p className="text-gray-500">Loading schedule...</p>
+          {data?.source === 'demo' && (
+            <div className="mb-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+              The Google Sheet is not public yet, so this preview uses built-in sample entries. Once access is enabled, the page will switch to the full spreadsheet automatically.
             </div>
-          ) : error ? (
-            <div className="py-12 text-center text-red-500 bg-red-50 rounded-xl">
-              <p>{error}</p>
+          )}
+
+          {loading || !data ? (
+            <div className="py-24 text-center">
+              <div className="mb-4 inline-block h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-accent-500" />
+              <p className="text-sm text-gray-500">Loading programme…</p>
             </div>
           ) : (
-            <ScheduleTable filteredSchedule={filteredSchedule} dayNames={dayNames} />
+            <ProgrammeCalendar events={data.events} posters={data.posters} searchQuery={searchQuery} />
           )}
-        </motion.div>
+        </motion.section>
       </div>
     </main>
   );
