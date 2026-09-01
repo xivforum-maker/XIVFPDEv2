@@ -446,7 +446,7 @@ const TalkDetailsDialog = ({ events, onClose }: TalkDetailsDialogProps) => {
             </button>
           </div>
 
-          <div className={`min-h-0 overflow-y-auto px-4 py-3 md:px-8 md:py-5 ${isGroup ? 'flex-1' : 'flex-none'}`}>
+          <div className={`min-h-0 overflow-y-auto overscroll-contain px-4 py-3 md:px-8 md:py-5 ${isGroup ? 'flex-1' : 'flex-none'}`}>
             {events.map((talk) => (
               <article key={`${talk.start}-${talk.reference}`} className="border-b border-slate-100 py-5 first:pt-2 last:border-0 last:pb-2">
                 <div className="mb-2 flex flex-wrap items-center gap-2">
@@ -523,7 +523,7 @@ const PosterDialog = ({ event, posters, onClose }: PosterDialogProps) => {
             </button>
           </div>
 
-          <div className="min-h-0 flex-1 overflow-y-auto px-4 py-3 md:px-8 md:py-5">
+          <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-3 md:px-8 md:py-5">
             {sessionPosters.map((poster) => (
               <article key={poster.contributionId} className="grid grid-cols-[3rem_1fr_auto] gap-3 border-b border-slate-100 py-4 last:border-0 md:grid-cols-[4rem_1fr_auto] md:gap-5">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-100 text-sm font-bold text-sky-900 md:h-12 md:w-12">#{poster.posterNo}</div>
@@ -590,7 +590,7 @@ const EventDetailsDialog = ({ event, onClose }: EventDetailsDialogProps) => {
             </button>
           </div>
 
-          <div className="min-h-0 overflow-y-auto px-5 py-6 md:px-8 md:py-7">
+          <div className="min-h-0 overflow-y-auto overscroll-contain px-5 py-6 md:px-8 md:py-7">
             <p className="font-serif text-lg leading-relaxed text-slate-700 md:text-xl">
               {event.description || 'Details to be announced.'}
             </p>

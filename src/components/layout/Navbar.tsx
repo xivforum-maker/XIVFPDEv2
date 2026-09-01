@@ -5,6 +5,7 @@ import { Menu, X } from 'lucide-react';
 import { siteConfig } from '../../config/site';
 import { sponsors } from '../../data/sponsors';
 import { HeroBackground } from './HeroBackground';
+import { useScrollLock } from '../../hooks/useScrollLock';
 
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -12,6 +13,9 @@ export const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === '/';
+
+  // Strona pod spodem stoi nieruchomo, dopóki menu mobilne jest otwarte.
+  useScrollLock(isMobileMenuOpen);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -141,7 +145,7 @@ export const Navbar = () => {
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
               className={`fixed top-0 right-0 h-screen w-72 max-w-[80vw] z-[45] flex flex-col border-l transition-colors duration-300 ${mobileMenuBg} xl:hidden`}
             >
-              <div className="flex-1 overflow-y-auto px-6 pt-24 pb-8 flex flex-col items-center space-y-2">
+              <div className="flex-1 overflow-y-auto overscroll-contain px-6 pt-24 pb-8 flex flex-col items-center space-y-2">
                 {siteConfig.navLinks.map((link) => (
                   <Link
                     key={link.name}

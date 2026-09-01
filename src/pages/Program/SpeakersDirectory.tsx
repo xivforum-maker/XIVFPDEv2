@@ -203,7 +203,7 @@ export const SpeakersDirectory = ({ contributions, events, loading }: SpeakersDi
             </div>
           </div>
 
-          <div className="min-h-0 flex-1 overflow-y-auto px-4 py-3 md:px-8 md:py-5">
+          <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-3 md:px-8 md:py-5">
             {visibleSpeakers.map((speaker) => (
               <article key={speaker.key} className="grid gap-4 border-b border-slate-100 py-5 first:pt-2 last:border-0 last:pb-2 md:grid-cols-[15rem_minmax(0,1fr)] md:gap-8">
                 <div className="flex min-w-0 items-start gap-3">

@@ -27,6 +27,22 @@
   --color-accent-900: #0c4a6e;
 }
 
+html {
+  /* Rezerwuje miejsce na pasek przewijania na stałe, żeby układ strony nie
+     skakał w chwili, gdy okno modalne blokuje scroll dokumentu
+     (patrz: src/hooks/useScrollLock.ts). */
+  scrollbar-gutter: stable;
+}
+
+/* Blokada tła dla natywnych okien <dialog> otwieranych przez showModal().
+   Sam showModal() wygasza kliknięcia w tle, ale NIE zatrzymuje przewijania
+   dokumentu — trzeba to zrobić samemu. Reguła łapie każdy otwarty <dialog>
+   (Programme index, sesje, plakaty, abstrakty), więc obejmuje też okna
+   dodane w przyszłości. Dzięki scrollbar-gutter powyżej układ nie skacze. */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
 body {
   font-family: var(--font-sans);
   background-color: #fafafa;
