@@ -13,7 +13,7 @@ export const invitedSpeakers: Speaker[] = [
   { name: "Jacek Jendrej", affiliation: "Sorbonne Université, France", url: "https://webusers.imj-prg.fr/~jacek.jendrej/", image: "", imagePosition: "center" },
   { name: "Grzegorz Karch", affiliation: "University of Wrocław, Poland", url: "https://karch.math.uni.wroc.pl/", image: "", imagePosition: "center" },
   { name: "Michał Kowalczyk", affiliation: "University of Chile, Chile", url: "https://www.cmm.uchile.cl/?cmm_people=michal-kowalczyk", image: "", imagePosition: "center" },
-  { name: "Konstantin Merz", affiliation: "ETH Zurich, Switzerland", url: "https://people.phys.ethz.ch/~mkonstanti/", image: "", imagePosition: "center" },
+  // { name: "Konstantin Merz", affiliation: "ETH Zurich, Switzerland", url: "https://people.phys.ethz.ch/~mkonstanti/", image: "", imagePosition: "center" },
   { name: "Katarzyna Pietruska-Pałuba", affiliation: "University of Warsaw, Poland", url: "https://www.mimuw.edu.pl/pl/pracownicy/431/", image: "", imagePosition: "center" },
   { name: "Łukasz Płociniczak", affiliation: "Wrocław University of Science and Technology, Poland", url: "https://prac.im.pwr.edu.pl/~plociniczak/", image: "", imagePosition: "center" },
   // { name: "Julio Rossi (Not Confirmed)", affiliation: "University of Buenos Aires, Argentina", url: "#", image: "", imagePosition: "center" },

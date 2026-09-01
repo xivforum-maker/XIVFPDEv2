@@ -1,4 +1,5 @@
 export type ProgrammeEventType = 'Talk' | 'Food' | 'Break';
+export type ContributionType = 'Invited' | 'Contributed' | 'Poster';
 
 export interface ProgrammeEvent {
   date: string;
@@ -28,8 +29,21 @@ export interface PosterContribution {
   abstractUrl: string;
 }
 
+export interface ProgrammeContribution {
+  id: string;
+  firstName: string;
+  lastName: string;
+  type: ContributionType;
+  affiliation: string;
+  title: string;
+  abstractUrl: string;
+  posterNo: number | null;
+  posterSession: string;
+}
+
 export interface ProgrammeData {
   events: ProgrammeEvent[];
   posters: PosterContribution[];
+  contributions: ProgrammeContribution[];
   source: 'sheet' | 'demo';
 }

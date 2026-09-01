@@ -78,6 +78,7 @@ export const siteConfig = {
     },
     programme: {
       id: "1gAbrya9JKX_CyxJ101bc63IdgzXZLDNesRYKjsfChnY",
+      contributionsGid: "1186577792",
       eventsGid: "2142832505",
       postersGid: "1769459766",
       timezone: "Europe/Warsaw",

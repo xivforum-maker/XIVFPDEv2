@@ -1,5 +1,12 @@
 import { siteConfig } from '../../config/site';
-import type { PosterContribution, ProgrammeData, ProgrammeEvent, ProgrammeEventType } from './types';
+import type {
+  ContributionType,
+  PosterContribution,
+  ProgrammeContribution,
+  ProgrammeData,
+  ProgrammeEvent,
+  ProgrammeEventType,
+} from './types';
 
 type GvizCell = { v?: string | number | null; f?: string | null } | null;
 type GvizResponse = {
@@ -16,11 +23,12 @@ const valueOf = (cell: GvizCell): string => {
   return String(value).trim();
 };
 
-const fetchGvizRows = async (gid: string): Promise<string[][]> => {
+const fetchGvizRows = async (gid: string, range?: string): Promise<string[][]> => {
   const { id, cacheMinutes } = siteConfig.sheets.programme;
   const cacheBucket = Math.floor(Date.now() / (cacheMinutes * 60_000));
   const query = encodeURIComponent('select * where A is not null');
-  const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?gid=${gid}&headers=1&tqx=out:json&tq=${query}&_=${cacheBucket}`;
+  const rangeParam = range ? `&range=${encodeURIComponent(range)}` : '';
+  const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?gid=${gid}${rangeParam}&headers=1&tqx=out:json&tq=${query}&_=${cacheBucket}`;
   const controller = new AbortController();
   const timeout = window.setTimeout(() => controller.abort(), 6_000);
   let response: Response;
@@ -81,6 +89,25 @@ const toPoster = (row: string[]): PosterContribution | null => {
   };
 };
 
+const toContribution = (row: string[]): ProgrammeContribution | null => {
+  const [id, firstName, lastName, , type, affiliation, title, abstractUrl, posterNo, posterSession] = row;
+  if (!id || !firstName || !lastName || !['Invited', 'Contributed', 'Poster'].includes(type)) return null;
+
+  const parsedPosterNo = posterNo ? Number(posterNo) : null;
+
+  return {
+    id,
+    firstName,
+    lastName,
+    type: type as ContributionType,
+    affiliation: affiliation ?? '',
+    title: title ?? '',
+    abstractUrl: abstractUrl ?? '',
+    posterNo: parsedPosterNo !== null && Number.isFinite(parsedPosterNo) ? parsedPosterNo : null,
+    posterSession: posterSession ?? '',
+  };
+};
+
 const demoEvents: ProgrammeEvent[] = [
   ['2026-09-14', '09:00', '09:30', 'Break', 'Registration', '', 'Foyer', '', '', '', '', null, ''],
   ['2026-09-14', '09:30', '10:30', 'Talk', 'Invited', 'ANNA_KOWALSKA', 'Main Hall', 'Anna Kowalska', 'Institute of Mathematics, Polish Academy of Sciences', 'Nonlinear diffusion and singular structures', '', null, ''],
@@ -130,21 +157,58 @@ const demoPosters: PosterContribution[] = [
   { posterSession: 'PS2', posterNo: 8, contributionId: 'KARIM_HADDAD', name: 'Karim Haddad', affiliation: 'American University of Beirut', title: 'Inverse problems for nonlinear sources', abstractUrl: '' },
 ];
 
+const nameParts = (name: string) => {
+  const parts = name.trim().split(/\s+/);
+  return {
+    firstName: parts.slice(0, -1).join(' '),
+    lastName: parts.at(-1) ?? '',
+  };
+};
+
+const demoContributions: ProgrammeContribution[] = [
+  ...demoEvents
+    .filter((event) => event.type === 'Talk' && ['Invited', 'Contributed'].includes(event.subtype) && event.name)
+    .map((event) => ({
+      id: event.reference,
+      ...nameParts(event.name),
+      type: event.subtype as ContributionType,
+      affiliation: event.affiliation,
+      title: event.title,
+      abstractUrl: event.abstractUrl,
+      posterNo: null,
+      posterSession: '',
+    })),
+  ...demoPosters.map((poster) => ({
+    id: poster.contributionId,
+    ...nameParts(poster.name),
+    type: 'Poster' as const,
+    affiliation: poster.affiliation,
+    title: poster.title,
+    abstractUrl: poster.abstractUrl,
+    posterNo: poster.posterNo,
+    posterSession: poster.posterSession,
+  })),
+];
+
 export const getProgrammeData = async (): Promise<ProgrammeData> => {
   try {
-    const { eventsGid, postersGid } = siteConfig.sheets.programme;
-    const [eventRows, posterRows] = await Promise.all([
+    const { contributionsGid, eventsGid, postersGid } = siteConfig.sheets.programme;
+    const [eventRows, posterRows, contributionRows] = await Promise.all([
       fetchGvizRows(eventsGid),
       fetchGvizRows(postersGid),
+      fetchGvizRows(contributionsGid, 'A4:L300'),
     ]);
 
     const events = eventRows.map(toEvent).filter((event): event is ProgrammeEvent => Boolean(event));
     const posters = posterRows.map(toPoster).filter((poster): poster is PosterContribution => Boolean(poster));
+    const contributions = contributionRows
+      .map(toContribution)
+      .filter((contribution): contribution is ProgrammeContribution => Boolean(contribution));
     if (!events.length) throw new Error('The programme is empty');
 
-    return { events, posters, source: 'sheet' };
+    return { events, posters, contributions, source: 'sheet' };
   } catch (error) {
     console.warn('Using built-in programme preview:', error);
-    return { events: demoEvents, posters: demoPosters, source: 'demo' };
+    return { events: demoEvents, posters: demoPosters, contributions: demoContributions, source: 'demo' };
   }
 };

@@ -4,6 +4,7 @@ import { AlertCircle, BookOpen, Calendar, Database, ExternalLink, Info, Search }
 import { PageHeader } from '../../components/layout/PageHeader';
 import { siteConfig } from '../../config/site';
 import { ProgrammeCalendar } from './ProgrammeCalendar';
+import { SpeakersDirectory } from './SpeakersDirectory';
 import { getProgrammeData } from './programmeData';
 import type { ProgrammeData } from './types';
 
@@ -81,15 +82,21 @@ export const ProgramPage = () => {
               Please note that the conference programme is currently being prepared and may be adjusted as organizational details are finalized.
             </p>
             <p>
-              Invited talks are planned for 50 minutes, while contributed talks are planned for 20 minutes. Short intervals between talks are reserved for questions, speaker changes, and technical preparation.
+              Invited talks are planned for 55 minutes, while contributed talks are planned for 25 minutes. Short intervals between talks are reserved for questions, speaker changes, and technical preparation.
             </p>
           </div>
         </motion.aside>
 
+        <SpeakersDirectory
+          contributions={data?.contributions ?? []}
+          events={data?.events ?? []}
+          loading={loading}
+        />
+
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
+          transition={{ delay: 0.12 }}
           className="mb-12 rounded-2xl bg-white p-4 shadow-xl sm:p-6 lg:p-8"
           aria-labelledby="conference-programme-heading"
         >
