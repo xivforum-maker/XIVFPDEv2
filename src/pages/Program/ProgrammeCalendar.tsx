@@ -91,9 +91,15 @@ const shortDateLabel = (date: string) => {
 };
 
 const categoryClasses = {
-  Talk: 'border-sky-300 bg-[#e7f0f8] text-slate-900 hover:border-sky-500 hover:bg-[#dbeaf6]',
-  Food: 'border-[#cdbfa9] bg-[#eee7dc] text-[#5e5142] hover:border-[#b9a88d] hover:bg-[#e6ddcf]',
-  Break: 'border-slate-300 bg-[#f1f3f4] text-slate-700 hover:border-slate-400 hover:bg-slate-200/70',
+  Talk: 'border-sky-300 bg-[#e7f0f8] text-slate-900',
+  Food: 'border-[#cdbfa9] bg-[#eee7dc] text-[#5e5142]',
+  Break: 'border-slate-300 bg-[#f1f3f4] text-slate-700',
+};
+
+const interactiveCategoryClasses = {
+  Talk: 'hover:border-sky-500 hover:bg-[#dbeaf6]',
+  Food: 'hover:border-[#b9a88d] hover:bg-[#e6ddcf]',
+  Break: 'hover:border-slate-400 hover:bg-slate-200/70',
 };
 
 const badgeClasses = {
@@ -288,7 +294,7 @@ const EventCard = ({ event, pxPerMinute, timelineStart, timelineEnd, posters, qu
 
   if (event.subtype === 'Poster session') {
     return (
-      <button type="button" style={style} className={`${cardClass} cursor-pointer hover:-translate-y-px`} onClick={() => onOpenPosters(event)}>
+      <button type="button" style={style} className={`${cardClass} ${interactiveCategoryClasses[event.type]} cursor-pointer hover:-translate-y-px`} onClick={() => onOpenPosters(event)}>
         {content}
       </button>
     );
@@ -299,7 +305,7 @@ const EventCard = ({ event, pxPerMinute, timelineStart, timelineEnd, posters, qu
       <button
         type="button"
         style={style}
-        className={`${cardClass} cursor-pointer hover:-translate-y-px`}
+        className={`${cardClass} ${interactiveCategoryClasses[event.type]} cursor-pointer hover:-translate-y-px`}
         onClick={() => onOpenTalks([event])}
         aria-label={`${event.start}–${event.end}, ${badgeLabel}, ${event.name || 'To be announced'}, open details`}
       >
@@ -313,7 +319,7 @@ const EventCard = ({ event, pxPerMinute, timelineStart, timelineEnd, posters, qu
       <button
         type="button"
         style={style}
-        className={`${cardClass} cursor-pointer hover:-translate-y-px`}
+        className={`${cardClass} ${interactiveCategoryClasses[event.type]} cursor-pointer hover:-translate-y-px`}
         onClick={() => onOpenEvent(event)}
         aria-label={`${event.start}–${event.end}, ${event.subtype}, open details`}
       >
@@ -352,7 +358,7 @@ const ContributedGroupCard = ({ group, pxPerMinute, timelineStart, timelineEnd, 
     <button
       type="button"
       style={style}
-      className={`absolute inset-x-1 cursor-pointer overflow-hidden rounded-lg border text-left shadow-sm transition-[opacity,border-color,background-color,transform] ${categoryClasses.Talk} ${matches ? 'opacity-100 hover:-translate-y-px' : 'pointer-events-none opacity-15 grayscale'}`}
+      className={`absolute inset-x-1 cursor-pointer overflow-hidden rounded-lg border text-left shadow-sm transition-[opacity,border-color,background-color,transform] ${categoryClasses.Talk} ${interactiveCategoryClasses.Talk} ${matches ? 'opacity-100 hover:-translate-y-px' : 'pointer-events-none opacity-15 grayscale'}`}
       onClick={() => onOpenTalks(group.events)}
       aria-label={`${group.start}–${group.end}, contributed talks, ${group.events.length} speakers, open details`}
     >

@@ -148,7 +148,7 @@ export const SpeakersDirectory = ({ contributions, events, loading }: SpeakersDi
           type="button"
           onClick={() => setIsOpen(true)}
           disabled={loading || contributions.length === 0}
-          className="group flex w-full flex-col items-start gap-5 rounded-2xl border border-slate-200 bg-white p-6 text-left shadow-lg transition hover:-translate-y-0.5 hover:border-sky-300 hover:shadow-xl disabled:pointer-events-none disabled:opacity-60 sm:flex-row sm:items-center sm:p-8"
+          className="group flex w-full cursor-pointer flex-col items-start gap-5 rounded-2xl border border-slate-200 bg-white p-6 text-left shadow-lg transition hover:-translate-y-0.5 hover:border-sky-300 hover:shadow-xl disabled:pointer-events-none disabled:opacity-60 sm:flex-row sm:items-center sm:p-8"
         >
           <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-sky-100 text-sky-800 transition group-hover:bg-sky-200">
             <Users size={28} aria-hidden="true" />
