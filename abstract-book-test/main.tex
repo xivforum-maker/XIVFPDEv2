@@ -1,0 +1,128 @@
+\documentclass[11pt,a4paper,oneside]{book}
+
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage[a4paper,top=25mm,bottom=25mm,left=27mm,right=27mm,headheight=15pt]{geometry}
+\usepackage{xcolor}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+\definecolor{ForumNavy}{HTML}{17365D}
+\definecolor{ForumBlue}{HTML}{2F6B9A}
+\definecolor{ForumLight}{HTML}{EAF1F7}
+\definecolor{ForumGray}{HTML}{5F6872}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=ForumNavy,
+  urlcolor=ForumBlue,
+  pdftitle={XIV Forum of Partial Differential Equations -- Book of Abstracts},
+  pdfauthor={XIV Forum of Partial Differential Equations}
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.72em}
+\setstretch{1.08}
+\emergencystretch=2em
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\sffamily\footnotesize XIV Forum of Partial Differential Equations}
+\fancyhead[R]{\sffamily\footnotesize Book of Abstracts}
+\fancyfoot[C]{\sffamily\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\newcommand{\contributiontype}[1]{%
+  \par\noindent
+  \colorbox{ForumLight}{%
+    \parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
+      \centering\sffamily\footnotesize\bfseries\color{ForumNavy}\MakeUppercase{#1}%
+    }%
+  }%
+  \par\vspace{1.15em}
+}
+
+\newcommand{\abstractheading}[4]{%
+  \clearpage
+  \phantomsection
+  \addcontentsline{toc}{chapter}{#2: #1}
+  \contributiontype{#4}
+  {\centering
+    {\sffamily\bfseries\color{ForumNavy}\fontsize{19}{23}\selectfont #1\par}
+    \vspace{0.75em}
+    {\fontsize{13}{16}\selectfont\bfseries #2\par}
+    \vspace{0.25em}
+    {\small\itshape\color{ForumGray} #3\par}
+  }
+  \vspace{1.35em}
+  {\sffamily\bfseries\color{ForumBlue} Abstract\par}
+  \vspace{0.25em}
+}
+
+\newenvironment{abstractreferences}
+  {\par\vspace{0.8em}{\sffamily\bfseries\color{ForumBlue}References\par}\vspace{-0.2em}%
+   \begin{list}{}{\setlength{\leftmargin}{1.65em}\setlength{\labelwidth}{1.35em}%
+      \setlength{\labelsep}{0.3em}\setlength{\itemsep}{0.35em}\setlength{\parsep}{0pt}%
+      \setlength{\topsep}{0.35em}}\small}
+  {\end{list}}
+
+\newcommand{\referenceitem}[2]{\item[\textnormal{[#1]}] #2}
+
+\input{data/affiliations}
+
+\begin{document}
+
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+  \thispagestyle{empty}
+  \centering
+  \vspace*{18mm}
+  {\sffamily\bfseries\color{ForumNavy}\fontsize{16}{20}\selectfont
+    XIV FORUM OF PARTIAL DIFFERENTIAL EQUATIONS\par}
+  \vspace{18mm}
+  {\sffamily\bfseries\color{ForumNavy}\fontsize{34}{40}\selectfont
+    Book of Abstracts\par}
+  \vspace{5mm}
+  {\sffamily\color{ForumBlue}\fontsize{15}{19}\selectfont
+    Test edition -- four contributions\par}
+  \vfill
+  {\fontsize{13}{17}\selectfont
+    14--18 September 2026\par
+    Będlewo Conference Center, Poland\par}
+  \vspace{14mm}
+  {\sffamily\small\color{ForumGray}
+    \url{https://xivfpde.com}\par}
+  \vspace{12mm}
+\end{titlepage}
+\hypersetup{pageanchor=true}
+
+\frontmatter
+
+\chapter*{About this test edition}
+\addcontentsline{toc}{chapter}{About this test edition}
+
+This test edition demonstrates the proposed typographic structure for the final
+\emph{Book of Abstracts} of the XIV Forum of Partial Differential Equations.
+The wording of the abstracts is reproduced from the authors' submitted PDF files;
+only typographic markup and page layout have been standardized.
+
+The sample deliberately combines contributions with different levels of
+mathematical notation and bibliography complexity. Each abstract begins on a
+new page so that the layout can be reviewed independently before the complete
+collection is prepared.
+
+\tableofcontents
+
+\mainmatter
+
+\input{abstracts/iwona-chlebicka}
+\input{abstracts/marek-izydorek}
+\input{abstracts/guillaume-olive}
+\input{abstracts/sebastian-owczarek}
+
+\end{document}

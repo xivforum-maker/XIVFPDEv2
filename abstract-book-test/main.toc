@@ -1,0 +1,6 @@
+\babel@toc {english}{}\relax 
+\contentsline {chapter}{About this test edition}{i}{chapter*.1}%
+\contentsline {chapter}{Iwona Chlebicka: Defying Scaling in Potential Theory}{1}{section*.3}%
+\contentsline {chapter}{Marek Izydorek: Methods of the Conley index for a class of functionals in Banach spaces involving $p$-Laplacian}{2}{section*.4}%
+\contentsline {chapter}{Guillaume Olive: A method to determine the minimal null control time of one-dimensional linear hyperbolic systems}{3}{section*.5}%
+\contentsline {chapter}{Sebastian Owczarek: Higher regularity for relaxed micromorphic models: from smooth to Lipschitz domains}{4}{section*.6}%

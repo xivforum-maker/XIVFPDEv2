@@ -1,0 +1,50 @@
+\abstractheading
+  {A method to determine the minimal null control time of one-dimensional linear hyperbolic systems}
+  {Guillaume Olive}
+  {\affilJagiellonian}
+  {Contributed talk}
+
+How fast can a one-dimensional transport process be brought to rest by acting on
+just one end? This is a question about the \emph{minimal null control time}, a
+central notion in control theory that, for coupled hyperbolic systems, turns out
+to be delicate.
+
+Here, we consider first-order linear hyperbolic systems of the form:
+\[
+\left\{
+\begin{aligned}
+\frac{\partial y}{\partial t}(t,x)
+  +\Lambda(x)\frac{\partial y}{\partial x}(t,x)
+  &=M(x)y(t,x),\\
+y_{-}(t,1)&=u(t),
+  &y_{+}(t,0)&=Qy_{-}(t,0),\\
+y(0,x)&=y^{0}(x),
+\end{aligned}
+\right.
+\qquad (t,x)\in(0,T)\times(0,1).
+\]
+
+The components propagate at the speeds prescribed by $\Lambda$, interact
+through the internal coupling $M$, are coupled at the boundary through $Q$,
+and are steered by a control $u$ acting on one side. Such systems arise as
+linearizations, around steady states, of the nonlinear balance laws governing
+many transport phenomena [BC16; YK22]. Already in this linear setting,
+determining the minimal control time is a subtle problem, as it depends not only
+on the propagation speeds but on the couplings.
+
+In this talk, we present a general method that computes this minimal control time
+exactly, whenever $\Lambda$ and $M$ are sufficiently smooth functions of
+$x$. This presentation is based on the joint work [HO25] with Long Hu.
+
+\begin{abstractreferences}
+  \referenceitem{BC16}{G. Bastin and J.-M. Coron. \emph{Stability and boundary
+    stabilization of 1-D hyperbolic systems}. Vol.~88. Progress in Nonlinear
+    Differential Equations and their Applications. Subseries in Control.
+    Birkhäuser/Springer, [Cham], 2016, pp.~xiv+307.}
+  \referenceitem{HO25}{L. Hu and G. Olive. ``A method to determine the minimal
+    null control time of 1D linear hyperbolic balance laws''. In:
+    \emph{J. Differential Equations} 440. part~1 (2025), pp.~113--455.}
+  \referenceitem{YK22}{H. Yu and M. Krstic. \emph{Traffic Congestion Control by
+    PDE Backstepping}. Systems \& Control: Foundations \& Applications.
+    Birkhäuser Cham, 2022, pp.~XVII, 356.}
+\end{abstractreferences}
