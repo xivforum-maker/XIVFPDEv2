@@ -157,7 +157,7 @@ export const SpeakersDirectory = ({ contributions, events, loading }: SpeakersDi
             <span className="mb-1 block text-[11px] font-bold uppercase tracking-[0.16em] text-sky-700">Programme index</span>
             <span id="speakers-directory-heading" className="block text-2xl font-serif font-semibold text-primary-900">Speakers &amp; contributions</span>
             <span className="mt-1 block max-w-3xl text-sm leading-relaxed text-slate-600">
-              Speakers, times and abstracts — A–Z.
+              Speakers, times and abstracts.
             </span>
           </span>
           <span className="flex shrink-0 items-center gap-3 self-stretch border-t border-slate-100 pt-4 text-sm font-semibold text-primary-900 sm:self-auto sm:border-l sm:border-t-0 sm:py-2 sm:pl-6 sm:pt-2">
