@@ -215,9 +215,11 @@ const EventCard = ({ event, pxPerMinute, timelineStart, timelineEnd, posters, qu
     ? 'Meal'
     : event.type === 'Break'
       ? 'Event'
-      : event.subtype === 'Invited' || event.subtype === 'Contributed'
-        ? `${event.subtype} talk`
-        : event.subtype;
+      : event.subtype === 'Invited'
+        ? 'Invited speaker'
+        : event.subtype === 'Contributed'
+          ? 'Contributed talk'
+          : event.subtype;
   const style: CSSProperties = {
     top: (start - timelineStart) * pxPerMinute,
     height: visibleDuration * pxPerMinute,
