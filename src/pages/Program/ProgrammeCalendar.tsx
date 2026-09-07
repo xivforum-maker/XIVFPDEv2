@@ -210,7 +210,7 @@ const EventCard = ({ event, pxPerMinute, timelineStart, timelineEnd, posters, qu
   const showExtraInfo = Boolean(event.extraInfo)
     && !(event.type === 'Break' && event.subtype.toLowerCase() === 'coffee break')
     && !isCompactEvent;
-  const posterCount = event.posterCount ?? sessionPosters.length;
+  const posterCount = sessionPosters.length;
   const badgeLabel = event.type === 'Food'
     ? 'Meal'
     : event.type === 'Break'
