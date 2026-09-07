@@ -263,7 +263,7 @@ const EventCard = ({ event, pxPerMinute, timelineStart, timelineEnd, posters, qu
 
       {event.subtype === 'Poster session' && (
         <>
-          <div className="text-sm font-serif font-bold uppercase leading-tight text-sky-950">Poster session</div>
+          <div className="text-sm font-serif font-bold uppercase leading-tight text-sky-950">Poster session &amp; Coffee break</div>
           <div className={`${roomy ? 'text-sm' : 'text-[10px]'} font-semibold text-sky-800`}>{posterCount} posters</div>
           {showExtraInfo && (
             <div className="mt-auto flex items-center gap-1 truncate text-[9px] text-sky-900/60">
@@ -521,7 +521,7 @@ const PosterDialog = ({ event, posters, onClose }: PosterDialogProps) => {
           <div className="flex shrink-0 items-start justify-between gap-6 border-b border-slate-200 bg-sky-50 px-5 py-5 md:px-8">
             <div>
               <div className="mb-1 text-xs font-bold uppercase tracking-[0.16em] text-sky-700">{event.start}–{event.end} · {event.reference}</div>
-              <h4 className="text-2xl font-serif font-semibold text-primary-900">Poster session</h4>
+              <h4 className="text-2xl font-serif font-semibold text-primary-900">Poster session &amp; Coffee break</h4>
               <p className="mt-1 flex items-center gap-1.5 text-sm text-slate-500"><MapPin size={14} /> {event.extraInfo} · {sessionPosters.length} posters</p>
             </div>
             <button type="button" onClick={onClose} className="rounded-full p-2 text-slate-500 transition hover:bg-white hover:text-slate-900" aria-label="Close poster list">
