@@ -33,41 +33,9 @@ export const ProgramPage = () => {
       <PageHeader title="Programme & Abstracts" subtitle="Conference schedule and submissions" />
 
       <div className="relative z-10 mx-auto -mt-8 max-w-[1600px] px-3 sm:px-6 lg:px-8">
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mx-auto mb-12 max-w-6xl rounded-2xl bg-white p-8 shadow-xl md:p-12"
-          aria-labelledby="abstract-submission-heading"
-        >
-          <div className="mb-12 text-center">
-            <BookOpen size={48} className="mx-auto mb-6 text-accent-500" />
-            <h3 id="abstract-submission-heading" className="mb-4 text-2xl font-serif text-primary-900">Abstract Submission</h3>
-            <p className="mx-auto mb-4 max-w-2xl text-gray-600">
-              Deadline for abstract submission: <strong className="text-primary-900">{siteConfig.deadlines.abstracts}</strong>
-            </p>
-            <p className="mx-auto mb-8 max-w-2xl text-gray-600">Please note that abstract submission requires a Google account.</p>
-            <a
-              href={siteConfig.links.abstractSubmission}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center rounded-full bg-primary-900 px-8 py-3 font-medium text-white transition-all hover:bg-primary-800"
-            >
-              Submit Abstract <ExternalLink size={16} className="ml-2" />
-            </a>
-          </div>
+        
 
-          <div className="rounded-r-xl border-l-4 border-blue-500 bg-blue-50 p-6">
-            <h4 className="mb-2 flex items-center gap-2 text-lg font-medium text-blue-900">
-              <AlertCircle size={20} className="text-blue-600" /> Alternative Submission
-            </h4>
-            <p className="text-blue-800">
-              If you wish to submit an abstract without using a Google account, please send your abstract directly to the conference organizers at{' '}
-              <a href={`mailto:${siteConfig.contactEmail}`} className="font-bold hover:underline">{siteConfig.contactEmail}</a>.
-            </p>
-          </div>
-        </motion.section>
-
-        <motion.aside
+        {/* <motion.aside
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
@@ -82,10 +50,10 @@ export const ProgramPage = () => {
               Please note that the conference programme is currently being prepared and may be adjusted as organizational details are finalized.
             </p>
             <p>
-              Invited talks are planned for 55 minutes, while contributed talks are planned for 25 minutes. Short intervals between talks are reserved for questions, speaker changes, and technical preparation.
+              Invited talks are planned for 45 minutes, while contributed talks are planned for 25 minutes. Short intervals between talks are reserved for questions, speaker changes, and technical preparation.
             </p>
           </div>
-        </motion.aside>
+        </motion.aside> */}
 
         <SpeakersDirectory
           contributions={data?.contributions ?? []}
@@ -139,6 +107,41 @@ export const ProgramPage = () => {
             <ProgrammeCalendar events={data.events} posters={data.posters} searchQuery={searchQuery} />
           )}
         </motion.section>
+
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mx-auto mb-12 max-w-6xl rounded-2xl bg-white p-8 shadow-xl md:p-12"
+          aria-labelledby="abstract-submission-heading"
+        >
+          <div className="mb-12 text-center">
+            <BookOpen size={48} className="mx-auto mb-6 text-accent-500" />
+            <h3 id="abstract-submission-heading" className="mb-4 text-2xl font-serif text-primary-900">Abstract Submission</h3>
+            <p className="mx-auto mb-4 max-w-2xl text-gray-600">
+              Deadline for abstract submission: <strong className="text-primary-900">{siteConfig.deadlines.abstracts}</strong>
+            </p>
+            <p className="mx-auto mb-8 max-w-2xl text-gray-600">Please note that abstract submission requires a Google account.</p>
+            <a
+              href={siteConfig.links.abstractSubmission}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center rounded-full bg-primary-900 px-8 py-3 font-medium text-white transition-all hover:bg-primary-800"
+            >
+              Submit Abstract <ExternalLink size={16} className="ml-2" />
+            </a>
+          </div>
+
+          <div className="rounded-r-xl border-l-4 border-blue-500 bg-blue-50 p-6">
+            <h4 className="mb-2 flex items-center gap-2 text-lg font-medium text-blue-900">
+              <AlertCircle size={20} className="text-blue-600" /> Alternative Submission
+            </h4>
+            <p className="text-blue-800">
+              If you wish to submit an abstract without using a Google account, please send your abstract directly to the conference organizers at{' '}
+              <a href={`mailto:${siteConfig.contactEmail}`} className="font-bold hover:underline">{siteConfig.contactEmail}</a>.
+            </p>
+          </div>
+        </motion.section>
+        
       </div>
     </main>
   );
