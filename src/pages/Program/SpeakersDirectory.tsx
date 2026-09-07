@@ -48,7 +48,7 @@ const dateLabel = (date: string) => new Intl.DateTimeFormat('en-GB', {
 }).format(new Date(`${date}T12:00:00Z`));
 
 const typeLabels: Record<ContributionType, string> = {
-  Invited: 'Invited talk',
+  Invited: 'Invited speaker',
   Contributed: 'Contributed talk',
   Poster: 'Poster',
 };
