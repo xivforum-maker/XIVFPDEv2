@@ -441,7 +441,7 @@ const TalkDetailsDialog = ({ events, onClose }: TalkDetailsDialogProps) => {
                 {firstEvent.start}–{lastEvent.end}
               </div>
               <h4 className="text-2xl font-serif font-semibold text-primary-900">
-                {isGroup ? 'Contributed talks' : `${firstEvent.subtype} talk`}
+                {isGroup ? 'Contributed talks' : firstEvent.subtype === 'Invited' ? 'Invited speaker' : `${firstEvent.subtype} talk`}
               </h4>
               {locations.length > 0 && (
                 <p className="mt-1 flex items-center gap-1.5 text-sm text-slate-500">
@@ -460,7 +460,7 @@ const TalkDetailsDialog = ({ events, onClose }: TalkDetailsDialogProps) => {
                 <div className="mb-2 flex flex-wrap items-center gap-2">
                   <span className="text-xs font-bold tabular-nums text-sky-800">{talk.start}–{talk.end}</span>
                   <span className={`rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.1em] ring-1 ring-inset ${badgeClasses.Talk}`}>
-                    {talk.subtype} talk
+                    {talk.subtype === 'Invited' ? 'Invited speaker' : `${talk.subtype} talk`}
                   </span>
                 </div>
                 <h5 className="font-sans text-base font-bold text-slate-900 md:text-lg">{talk.name || 'To be announced'}</h5>
